@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 Video Trending - Facebook & TikTok</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo-icon {
+            font-size: 32px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, #ff0050, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Platform Tabs */
+        .platform-tabs {
+            display: flex;
+            gap: 10px;
+            margin: 30px auto;
+            max-width: 1400px;
+            padding: 0 20px;
+        }
+
+        .platform-tab {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .platform-tab.facebook {
+            background: rgba(24, 119, 242, 0.2);
+            color: #1877f2;
+            border: 2px solid #1877f2;
+        }
+
+        .platform-tab.facebook.active {
+            background: #1877f2;
+            color: white;
+            box-shadow: 0 0 30px rgba(24, 119, 242, 0.5);
+        }
+
+        .platform-tab.tiktok {
+            background: rgba(255, 0, 80, 0.2);
+            color: #ff0050;
+            border: 2px solid #ff0050;
+        }
+
+        .platform-tab.tiktok.active {
+            background: linear-gradient(90deg, #00f2ea, #ff0050);
+            color: white;
+            border: none;
+            box-shadow: 0 0 30px rgba(255, 0, 80, 0.5);
+        }
+
+        .platform-tab.all {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .platform-tab.all.active {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            box-shadow: 0 0 30px rgba(102, 126, 234, 0.5);
+        }
+
+        /* Category Filter */
+        .category-filter {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            max-width: 1400px;
+            padding: 0 20px;
+            margin-left: auto;
+            margin-right: auto;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            color: #aaa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .category-btn:hover, .category-btn.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border-color: #fff;
+        }
+
+        /* Video Grid */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Video Card */
+        .video-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .video-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .video-thumbnail {
+            position: relative;
+            padding-top: 130%;
+            background: #000;
+            overflow: hidden;
+        }
+
+        .video-thumbnail img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-duration {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .video-platform-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .video-platform-badge.facebook {
+            background: #1877f2;
+        }
+
+        .video-platform-badge.tiktok {
+            background: linear-gradient(90deg, #00f2ea, #ff0050);
+        }
+
+        .video-trending-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff4757;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .video-play-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-card:hover .video-play-overlay {
+            opacity: 1;
+        }
+
+        .play-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: #000;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+        }
+
+        .video-info {
+            padding: 15px;
+        }
+
+        .video-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #888;
+            font-size: 13px;
+        }
+
+        .video-stats {
+            display: flex;
+            gap: 15px;
+        }
+
+        .video-stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .video-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .action-btn.download {
+            background: rgba(255, 0, 80, 0.2);
+            color: #ff0050;
+        }
+
+        .action-btn.download:hover {
+            background: #ff0050;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .action-btn.share {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+        }
+
+        .action-btn.share:hover {
+            background: #00d4ff;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #ff0050, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: #888;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #ff0050;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 50px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .platform-tabs {
+                justify-content: center;
+            }
+
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Modal for video preview */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+        }
+
+        .modal video, .modal iframe {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 10px;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.3s ease;
+            z-index: 2000;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-icon">🔥</span>
+                <span>Video<span class="gradient-text">Trending</span></span>
+            </div>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 Cari video..." 
+                    style="padding: 10px 20px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.2); 
+                    background: rgba(255,255,255,0.1); color: white; width: 250px; outline: none;">
+            </div>
+        </div>
+    </header>
+
+    <!-- Platform Tabs -->
+    <div class="platform-tabs">
+        <button class="platform-tab all active" onclick="filterPlatform('all')">
+            🎯 Semua
+        </button>
+        <button class="platform-tab facebook" onclick="filterPlatform('facebook')">
+            📘 Facebook
+        </button>
+        <button class="platform-tab tiktok" onclick="filterPlatform('tiktok')">
+            🎵 TikTok
+        </button>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="category-filter">
+        <button class="category-btn active" onclick="filterCategory('all')">Semua</button>
+        <button class="category-btn" onclick="filterCategory('trending')">🔥 Trending</button>
+        <button class="category-btn" onclick="filterCategory('music')">🎵 Musik</button>
+        <button class="category-btn" onclick="filterCategory('comedy')">😂 Comedy</button>
+        <button class="category-btn" onclick="filterCategory('dance')">💃 Dance</button>
+        <button class="category-btn" onclick="filterCategory('food')">🍔 Food</button>
+        <button class="category-btn" onclick="filterCategory('beauty')">💄 Beauty</button>
+        <button class="category-btn" onclick="filterCategory('pets')">🐱 Hewan</button>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+        <div class="stat-card">
+            <div class="stat-icon">📹</div>
+            <div class="stat-number" id="totalVideos">0</div>
+            <div class="stat-label">Total Video</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">👁️</div>
+            <div class="stat-number" id="totalViews">0</div>
+            <div class="stat-label">Total Views</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📘</div>
+            <div class="stat-number" id="fbCount">0</div>
+            <div class="stat-label">Facebook</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🎵</div>
+            <div class="stat-number" id="ttCount">0</div>
+            <div class="stat-label">TikTok</div>
+        </div>
+    </div>
+
+    <!-- Video Grid -->
+    <div class="video-grid" id="videoGrid">
+        <!-- Videos will be rendered here -->
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>🔥 Video Trending App - Facebook & TikTok</p>
+        <p style="margin-top: 10px; font-size: 12px;">Dibuat dengan ❤️ menggunakan HTML, CSS & JavaScript</p>
+    </footer>
+
+    <!-- Modal -->
+    <div class="modal" id="videoModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <span>✓</span>
+        <span id="toastMessage"></span>
+    </div>
+
+    <script>
+        // Video Data
+        const videos = [
+            {
+                id: 1,
+                title: "Dance Challenge Viral 2024 - Lagi Trending Banget! 💃🔥",
+                platform: "tiktok",
+                category: "dance",
+                views: "12.5M",
+                likes: "2.1M",
+                duration: "0:45",
+                thumbnail: "https://picsum.photos/seed/dance1/400/520",
+                trending: true,
+                created: "2 jam lalu"
+            },
+            {
+                id: 2,
+                title: "Momen Lucu Ini Bikin Ngakak Terus! 😂",
+                platform: "facebook",
+                category: "comedy",
+                views: "8.2M",
+                likes: "890K",
+                duration: "1:30",
+                thumbnail: "https://picsum.photos/seed/comedy1/400/520",
+                trending: true,
+                created: "4 jam lalu"
+            },
+            {
+                id: 3,
+                title: "Resep Mie Goreng Spesial ala Warung Tercinta 🍜",
+                platform: "tiktok",
+                category: "food",
+                views: "5.6M",
+                likes: "456K",
+                duration: "2:15",
+                thumbnail: "https://picsum.photos/seed/food1/400/520",
+                trending: false,
+                created: "6 jam lalu"
+            },
+            {
+                id: 4,
+                title: "Tutorial Makeup Natural untuk Sehari-hari 💄",
+                platform: "facebook",
+                category: "beauty",
+                views: "3.4M",
+                likes: "234K",
+                duration: "3:45",
+                thumbnail: "https://picsum.photos/seed/beauty1/400/520",
+                trending: false,
+                created: "8 jam lalu"
+            },
+            {
+                id: 5,
+                title: "Kucing Lucu Yang Bikin Gemes! 🐱💕",
+                platform: "tiktok",
+                category: "pets",
+                views: "15.8M",
+                likes: "3.2M",
+                duration: "0:30",
+                thumbnail: "https://picsum.photos/seed/pet1/400/520",
+                trending: true,
+                created: "1 jam lalu"
+            },
+            {
+                id: 6,
+                title: "Lagu Viral yang Lagi Hits di Semua Platform 🎵",
+                platform: "tiktok",
+                category: "music",
+                views: "45.2M",
+                likes: "8.9M",
+                duration: "0:58",
+                thumbnail: "https://picsum.photos/seed/music1/400/520",
+                trending: true,
+                created: "30 menit lalu"
+            },
+            {
+                id: 7,
+                title: "Story Lucu yang Pasti Bikin Ketawa ngakak 😂",
+                platform: "facebook",
+                category: "comedy",
+                views: "6.7M",
+                likes: "567K",
+                duration: "1:15",
+                thumbnail: "https://picsum.photos/seed/comedy2/400/520",
+                trending: false,
+                created: "10 jam lalu"
+            },
+            {
+                id: 8,
+                title: "Momen Tak Terduga yang Viral di Internet! 🔥",
+                platform: "tiktok",
+                category: "trending",
+                views: "23.4M",
+                likes: "4.5M",
+                duration: "1:02",
+                thumbnail: "https://picsum.photos/seed/trend1/400/520",
+                trending: true,
+                created: "3 jam lalu"
+            },
+            {
+                id: 9,
+                title: "Jalan-Jalan ke Tempat Hits yang Wajib Dikunjungi 🏝️",
+                platform: "facebook",
+                category: "trending",
+                views: "4.1M",
+                likes: "189K",
+                duration: "4:20",
+                thumbnail: "https://picsum.photos/seed/travel1/400/520",
+                trending: false,
+                created: "12 jam lalu"
+            },
+            {
+                id: 10,
+                title: "Anjing Menggemaskan yang Bikin Senyum Seharian 🐕",
+                platform: "tiktok",
+                category: "pets",
+                views: "18.9M",
+                likes: "3.8M",
+                duration: "0:42",
+                thumbnail: "https://picsum.photos/seed/pet2/400/520",
+                trending: true,
+                created: "45 menit lalu"
+            },
+            {
+                id: 11,
+                title: "Tutorial Dansa Breakdance untuk Pemula 💃",
+                platform: "facebook",
+                category: "dance",
+                views: "2.8M",
+                likes: "145K",
+                duration: "5:30",
+                thumbnail: "https://picsum.photos/seed/dance2/400/520",
+                trending: false,
+                created: "15 jam lalu"
+            },
+            {
+                id: 12,
+                title: "Makanan Street Food yang Wajib Dicoba! 🍢",
+                platform: "tiktok",
+                category: "food",
+                views: "9.3M",
+                likes: "789K",
+                duration: "1:48",
+                thumbnail: "https://picsum.photos/seed/food2/400/520",
+                trending: true,
+                created: "2 jam lalu"
+            },
+            {
+                id: 13,
+                title: "Behind The Scenes Film Terpopuler 🎬",
+                platform: "facebook",
+                category: "trending",
+                views: "7.6M",
+                likes: "456K",
+                duration: "3:15",
+                thumbnail: "https://picsum.photos/seed/movie1/400/520",
+                trending: false,
+                created: "20 jam lalu"
+            },
+            {
+                id: 14,
+                title: "Challenge Terberat yang viral! 🏆",
+                platform: "tiktok",
+                category: "trending",
+                views: "34.7M",
+                likes: "6.2M",
+                duration: "0:55",
+                thumbnail: "https://picsum.photos/seed/challenge1/400/520",
+                trending: true,
+                created: "1 jam lalu"
+            },
+            {
+                id: 15,
+                title: "Tutorial Skincare Routine Pagi & Malam 🌟",
+                platform: "facebook",
+                category: "beauty",
+                views: "5.2M",
+                likes: "378K",
+                duration: "4:45",
+                thumbnail: "https://picsum.photos/seed/skincare1/400/520",
+                trending: false,
+                created: "18 jam lalu"
+            },
+            {
+                id: 16,
+                title: "DJ Song Remix yang BikinParty Makin Seru! 🎧",
+                platform: "tiktok",
+                category: "music",
+                views: "28.4M",
+                likes: "5.1M",
+                duration: "2:30",
+                thumbnail: "https://picsum.photos/seed/dj1/400/520",
+                trending: true,
+                created: "4 jam lalu"
+            }
+        ];
+
+        let currentPlatform = 'all';
+        let currentCategory = 'all';
+        let searchQuery = '';
+
+        // Format numbers
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+
+        // Render videos
+        function renderVideos() {
+            const grid = document.getElementById('videoGrid');
+            
+            let filtered = videos.filter(v => {
+                const matchPlatform = currentPlatform === 'all' || v.platform === currentPlatform;
+                const matchCategory = currentCategory === 'all' || v.category === currentCategory;
+                const matchSearch = v.title.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchPlatform && matchCategory && matchSearch;
+            });
+
+            // Sort by trending first
+            filtered.sort((a, b) => (b.trending ? 1 : 0) - (a.trending ? 1 : 0));
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 50px; color: #888;">
+                        <p style="font-size: 48px;">🔍</p>
+                        <p>Tidak ada video yang ditemukan</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(video => `
+                <div class="video-card" onclick="openVideo(${video.id})">
+                    <div class="video-thumbnail">
+                        <img src="${video.thumbnail}" alt="${video.title}" loading="lazy">
+                        <span class="video-duration">${video.duration}</span>
+                        <span class="video-platform-badge ${video.platform}">
+                            ${video.platform === 'tiktok' ? '🎵' : '📘'} ${video.platform}
+                        </span>
+                        ${video.trending ? '<span class="video-trending-badge">🔥 HOT</span>' : ''}
+                        <div class="video-play-overlay">
+                            <div class="play-icon">▶</div>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">${video.title}</h3>
+                        <div class="video-meta">
+                            <div class="video-stats">
+                                <span class="video-stat">👁️ ${video.views}</span>
+                                <span class="video-stat">❤️ ${video.likes}</span>
+                            </div>
+                            <div class="video-actions">
+                                <button class="action-btn download" onclick="event.stopPropagation(); downloadVideo(${video.id})" title="Download">⬇️</button>
+                                <button class="action-btn share" onclick="event.stopPropagation(); shareVideo(${video.id})" title="Share">📤</button>
+                            </div>
+                        </div>
+                        <p style="color: #666; font-size: 12px; margin-top: 8px;">${video.created}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            updateStats();
+        }
+
+        // Update stats
+        function updateStats() {
+            const filtered = videos.filter(v => {
+                const matchPlatform = currentPlatform === 'all' || v.platform === currentPlatform;
+                const matchCategory = currentCategory === 'all' || v.category === currentCategory;
+                const matchSearch = v.title.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchPlatform && matchCategory && matchSearch;
+            });
+
+            document.getElementById('totalVideos').textContent = filtered.length;
+            document.getElementById('fbCount').textContent = videos.filter(v => v.platform === 'facebook').length;
+            document.getElementById('ttCount').textContent = videos.filter(v => v.platform === 'tiktok').length;
+        }
+
+        // Filter platform
+        function filterPlatform(platform) {
+            currentPlatform = platform;
+            document.querySelectorAll('.platform-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelector(`.platform-tab.${platform}`).classList.add('active');
+            renderVideos();
+        }
+
+        // Filter category
+        function filterCategory(category) {
+            currentCategory = category;
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderVideos();
+        }
+
+        // Open video modal
+        function openVideo(id) {
+            const video = videos.find(v => v.id === id);
+            if (!video) return;
+
+            const modal = document.getElementById('videoModal');
+            const content = document.getElementById('modalContent');
+            
+            content.innerHTML = `
+                <div style="background: rgba(255,255,255,0.1); border-radius: 15px; padding: 30px; text-align: center; max-width: 500px;">
+                    <p style="font-size: 60px; margin-bottom: 20px;">${video.platform === 'tiktok' ? '🎵' : '📘'}</p>
+                    <h2 style="margin-bottom: 15px;">${video.title}</h2>
+                    <p style="color: #888; margin-bottom: 20px;">👁️ ${video.views} | ❤️ ${video.likes}</p>
+                    <p style="color: #aaa;">Demo video player - Klik untuk menutup</p>
+                    <p style="color: #666; margin-top: 20px; font-size: 14px;">
+                        ${video.platform === 'tiktok' 
+                            ? 'Buka di TikTok untuk melihat video lengkap' 
+                            : 'Buka di Facebook untuk melihat video lengkap'}
+                    </p>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('videoModal').classList.remove('active');
+        }
+
+        // Download video
+        function downloadVideo(id) {
+            const video = videos.find(v => v.id === id);
+            showToast(`Download started: ${video.title.substring(0, 30)}...`);
+        }
+
+        // Share video
+        function shareVideo(id) {
+            const video = videos.find(v => v.id === id);
+            if (navigator.share) {
+                navigator.share({
+                    title: video.title,
+                    text: 'Lihat video trending ini!',
+                    url: window.location.href
+                });
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                showToast('Link copied to clipboard!');
+            }
+        }
+
+        // Toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            renderVideos();
+        });
+
+        // Close modal on outside click
+        document.getElementById('videoModal').addEventListener('click', (e) => {
+            if (e.target.id === 'videoModal') {
+                closeModal();
+            }
+        });
+
+        // Initialize
+        renderVideos();
+    </script>
+</body>
+</html>
