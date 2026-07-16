@@ -1,5 +1,8 @@
 # Video Trending App 📺
 
+> **Created by Antono**
+
+
 ![Video Trending Banner](https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?w=800)
 
 Discover and track trending videos across platforms.
